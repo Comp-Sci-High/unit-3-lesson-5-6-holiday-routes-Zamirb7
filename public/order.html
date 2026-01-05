@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Order Candy</title>
+  <link rel="stylesheet" href="order.css" />
+</head>
+<body>
+  <h1 id="candy-title">Order Your Candy</h1>
+  <div id="candy-image" class="candy-image"></div>
+  <button id="order-button">Order Now</button>
+  <div id="order-form" class="order-form" style="display: none;">
+    <h2>Complete Your Order</h2>
+    <form action="/send-order" method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <button type="submit">Send Order</button>
+    </form>
+  </div>
+  <script>
+    const images = {
+      'Candy Corn': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cG9seWdvbiBwb2ludHM9IjUwLDEwIDkwLDkwIDEwLDkwIiBmaWxsPSIjZmY5OTAwIiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMiIvPgogIDxwb2x5Z29uIHBvaW50cz0iNTAsMTAgOTAsOTAgNTAsNjAiIGZpbGw9IiNmZmZmMDAiLz4KICA8cG9seWdvbiBwb2ludHM9IjUwLDEwIDEwLDkwIDUwLDYwIiBmaWxsPSIjZmZmZmZmIi8+Cjwvc3ZnPg==',
+      'Chocolate Bats': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNNTAsMTAgQzMwLDEwIDIwLDIwIDIwLDMwIEMyMCw0MCAzMCw1MCA1MCw1MCBDNzAsNTAgODAsNDAgODAsMzAgQzgwLDIwIDcwLDEwIDUwLDEwIFoiIGZpbGw9IiM4MDgwNDAiLz4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjMwIiByPSI1IiBmaWxsPSIjZmZmIi8+CiAgPGNpcmNsZSBjeD0iNjAiIGN5PSIzMCIgcj0iNSIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4=',
+      'Gummy Worms': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNMTAsNTAgUTIwLDMwIDMwLDUwIFQzMCw3MCA0MCw1MCBRNTAsNzAgNjAsNTAgUTcwLDMwIDgwLDUwIFQ4MCw3MCA5MCw1MCIgZmlsbD0iIzAwZmYwMCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+',
+      'Licorice Ghosts': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cGF0aCBkPSJNNTAsMTAgQzMwLDEwIDIwLDIwIDIwLDMwIEMyMCw0MCAzMCw1MCA1MCw1MCBDNzAsNTAgODAsNDAgODAsMzAgQzgwLDIwIDcwLDEwIDUwLDEwIFoiIGZpbGw9IiMwMDAiLz4KICA8Y2lyY2xlIGN4PSI0MCIgY3k9IjMwIiByPSI1IiBmaWxsPSIjZmZmIi8+CiAgPGNpcmNsZSBjeD0iNjAiIGN5PSIzMCIgcj0iNSIgZmlsbD0iI2ZmZiIvPgo8L3N2Zz4=',
+      'Pumpkin Gummies': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZWxsaXBzZSBjeD0iNTAiIGN5PSI1MCIgcng9IjQwIiByeT0iMzAiIGZpbGw9IiNmZjY5MDAiLz4KICA8cGF0aCBkPSJNNTAsMjAgUTMwLDIwIDIwLDMwIFQyMCw0MCA0MCw0MCBRNTAsNDAgNjAsNDAgVDgwLDQwIDgwLDMwIFF1ODAsMjAgNjAsMjAgUTUwLDIwIDUwLDIwIiBmaWxsPSIjZmY5OTAwIi8+Cjwvc3ZnPg==',
+      'Spooky Lollipops': 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSI1MCIgY3k9IjUwIiByPSIyMCIgZmlsbD0iI2ZmMDAwMCIvPgogIDxsaW5lIHgxPSI1MCIgeTE9IjcwIiB4Mj0iNTAiIHkyPSI5MCIgc3Ryb2tlPSIjMDAwIiBzdHJva2Utd2lkdGg9IjQiLz4KPC9zdmc+'
+    };
+    const urlParams = new URLSearchParams(window.location.search);
+    const candy = urlParams.get('candy');
+    if (candy && images[candy]) {
+      document.getElementById('candy-title').textContent = `Order ${candy}`;
+      document.getElementById('candy-image').style.backgroundImage = `url(${images[candy]})`;
+    } else {
+      document.getElementById('candy-title').textContent = 'Candy not found';
+    }
+    document.getElementById('order-button').addEventListener('click', function() {
+      document.getElementById('order-form').style.display = 'block';
+      this.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
