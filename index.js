@@ -1,23 +1,31 @@
+
+//Importing express module
 const express = require("express")
+//Creating an express app
 const app = express()
+//Allows app to read data from the POST
 app.use(express.urlencoded({ extended: true }));
 
-
 app.use(express.static(__dirname + "/public"))
-
+//Setting up route for the homepage
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 })
+//Setting up route for the halloween page
 app.get("/halloween", (req, res) => {
   res.sendFile(__dirname + "/public/halloween.html");
 })
-
+//Starts the server and logs a message
 app.listen(3000, () => {
   console.log(`Holiday Server is Running!`)
 });
+//Setting up the form
 app.post("/send-order", async (req, res) => {
+  //Defining the name for later use
   const name = req.body.name;
+  //Making sure the name is valid
   if (!name || name.trim() === "") {
+    //Tells user again to entr their name if they didn't
     return res.send(`
       <!DOCTYPE html>
       <html lang="en">
@@ -49,6 +57,7 @@ app.post("/send-order", async (req, res) => {
       </html>
     `);
   }
+  //Telling the user their order was placed
   res.send(`
     <!DOCTYPE html>
     <html lang="en">
